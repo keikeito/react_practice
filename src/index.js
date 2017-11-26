@@ -1,1 +1,1 @@
-window.alert("aaaa")
+window.alert('aaaa')
