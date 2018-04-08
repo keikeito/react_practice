@@ -1,4 +1,10 @@
 $back: #eee;
+$text-color: #444;
 body {
   background-color: $back;
-}
+  text-align: center;
+  color: $text-color;
+};
+
+@import "GeocodeResult";
+@import "Map";
