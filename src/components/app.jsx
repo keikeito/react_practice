@@ -1,70 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import SearchForm from './SearchForm';
-import GeocodeResult from './GeocodeResult';
-import Map from './Map';
+import SearchPage from './SearchPage';
+import AboutPage from './AboutPage';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch,
+} from 'react-router-dom';
 
-import { geocode } from '../domain/Geocoder';
+const App = () => (
+  <Router>
+    <div className="app">
+      <ul className="left-navi">
+        <li><Link to="/">ホテル検索</Link></li>
+        <li><Link to="/about">About</Link></li>
+      </ul>
+      <Switch>
+        <Route exact path="/" component={SearchPage} />
+        <Route exact path="/about" component={AboutPage} />
+      </Switch>
+    </div>
+  </Router>
+);
 
-
-class App extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      location: {
-        lat: 35.6585805,
-        lng: 139.7454329,
-      },
-    };
-  }
-
-  setErrorMessage(message) {
-    this.setState({
-      address: message,
-      location: {
-        lat: 0,
-        lng: 0,
-      },
-    });
-  }
-
-  handlePlaceSubmit(place) {
-    geocode(place)
-      .then(({ status, address, location }) => {
-        switch (status) {
-          case 'OK': {
-            this.setState({ address, location });
-            break;
-          }
-          case 'ZERO_RESULTS': {
-            this.setErrorMessage('結果が見つかりませんでした');
-            break;
-          }
-          default: {
-            this.setErrorMessage('エラーが発生しました');
-          }
-        }
-      })
-      .catch(() => {
-        this.setErrorMessage('通信に失敗しました');
-      });
-  }
-
-
-  render() {
-    return (
-      <div>
-        <h1>緯度経度検索</h1>
-        <SearchForm onSubmit={place => this.handlePlaceSubmit(place)} />
-        <GeocodeResult
-          address={this.state.address}
-          location={this.state.location}
-        />
-        <Map location={this.state.location} />
-      </div>
-    );
-  }
-}
 
 export default App;
